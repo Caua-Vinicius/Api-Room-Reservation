@@ -6,6 +6,7 @@ import { CreateUserDto } from './dtos/createUserDto';
 import { Users } from './users.model';
 import { LoginDto } from './dtos/loginDto';
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -32,7 +33,11 @@ export class AuthService {
 
   async login(loginDto: LoginDto): Promise<{ access_token: string }> {
     const user = await this.validateUser(loginDto.email, loginDto.password);
-    const payload = { username: user.email, sub: user._id, role: user.role };
+    const payload: JwtPayload = {
+      email: user.email,
+      sub: user._id.toString(),
+      role: user.role,
+    };
     return {
       access_token: this.jwtService.sign(payload),
     };
