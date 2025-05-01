@@ -11,7 +11,6 @@ export class RoomService {
   ) {}
 
   async createRoom(createRoomDto: CreateRoomDto): Promise<Rooms> {
-    await this.roomModel.create({ createRoomDto });
     const newRoom = await this.roomModel.create({ createRoomDto });
     return newRoom;
   }
