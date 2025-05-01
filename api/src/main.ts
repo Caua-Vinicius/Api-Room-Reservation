@@ -9,6 +9,7 @@ async function bootstrap() {
     .setTitle('Rooms Reservations API')
     .setDescription('API para gerenciar gatos')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   app.setGlobalPrefix('api');

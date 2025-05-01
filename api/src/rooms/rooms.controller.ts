@@ -4,7 +4,9 @@ import { CreateRoomDto } from './dtos/createRoom.dto';
 import { Rooms } from './rooms.model';
 import { AuthJwtGuard } from 'common/guards/auth.guard';
 import { RoomsSwagger } from './rooms.swagger';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @UseGuards(AuthJwtGuard)
 @Controller('rooms')
 export class RoomsController {
