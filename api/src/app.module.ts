@@ -7,10 +7,11 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.DATABASE_URL),
     UsersModule,
     AuthModule,
+    RoomsModule,
   ],
   controllers: [],
   providers: [],

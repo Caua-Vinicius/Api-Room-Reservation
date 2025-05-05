@@ -14,6 +14,7 @@ export class AuthController {
     return await this.authService.register(createUserDto);
   }
 
+  @AuthSwagger.login()
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     return await this.authService.login(loginDto);
