@@ -1,10 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { RoomService } from './rooms.service';
 import { CreateRoomDto } from './dtos/createRoom.dto';
 import { Rooms } from './rooms.model';
 import { AuthJwtGuard } from 'common/guards/auth.guard';
 import { RoomsSwagger } from './rooms.swagger';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { ParseObjectIdPipe } from '@nestjs/mongoose';
 
 @ApiBearerAuth()
 @UseGuards(AuthJwtGuard)
@@ -26,14 +36,16 @@ export class RoomsController {
 
   @RoomsSwagger.getRoomById()
   @Get(':id')
-  async getRoomById(@Param('id') id: string): Promise<Rooms> {
+  async getRoomById(
+    @Param('id', ParseObjectIdPipe) id: string,
+  ): Promise<Rooms> {
     return this.roomService.getRoomById(id);
   }
 
   @RoomsSwagger.updateRoom()
-  @Post('/update/:id')
+  @Put('/update/:id')
   async updateRoom(
-    @Param('id') id: string,
+    @Param('id', ParseObjectIdPipe) id: string,
     @Body() updateRoomDto: CreateRoomDto,
   ): Promise<Rooms> {
     return this.roomService.updateRoom(id, updateRoomDto);
@@ -41,7 +53,7 @@ export class RoomsController {
 
   @RoomsSwagger.deleteRoom()
   @Delete('/delete/:id')
-  async deleteRoom(@Param('id') id: string): Promise<Rooms> {
+  async deleteRoom(@Param('id', ParseObjectIdPipe) id: string): Promise<Rooms> {
     return this.roomService.deleteRoom(id);
   }
 }

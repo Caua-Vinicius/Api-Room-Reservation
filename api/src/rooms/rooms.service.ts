@@ -1,9 +1,8 @@
 import { Model } from 'mongoose';
 import { Rooms } from './rooms.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRoomDto } from './dtos/createRoom.dto';
-
 @Injectable()
 export class RoomService {
   constructor(
@@ -24,13 +23,24 @@ export class RoomService {
   }
 
   async updateRoom(id: string, updateRoomDto: CreateRoomDto): Promise<Rooms> {
-    return this.roomModel.findByIdAndUpdate(id, updateRoomDto, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedRoom = await this.roomModel.findByIdAndUpdate(
+      id,
+      updateRoomDto,
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    if (!updatedRoom)
+      throw new NotFoundException(`Room with ID: ${id} not found`);
+
+    return updatedRoom;
   }
 
   async deleteRoom(id: string): Promise<Rooms> {
-    return this.roomModel.findByIdAndDelete(id).exec();
+    const room = await this.roomModel.findByIdAndDelete(id).exec();
+    if (!room) throw new NotFoundException(`Room with ID: ${id} not found`);
+    return room;
   }
 }
