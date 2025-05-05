@@ -8,7 +8,6 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { UserService } from 'src/users/users.service';
 import { ConfigModule } from '@nestjs/config';
-console.log('JWT_SECRET:', process.env.JWT_SECRET);
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),

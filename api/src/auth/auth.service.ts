@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -46,7 +46,10 @@ export class AuthService {
 
   async validateUser(email: string, pass: string): Promise<Users> {
     const user = await this.userModel.findOne({ email });
-    if (user && (await this.comparePassword(pass, user.password_hash))) {
+    if (!user) {
+      throw new NotFoundException(`User not found with email '${email}' not found` );
+    }
+    if ((await this.comparePassword(pass, user.password_hash))) {
       return user;
     }
     return null;
