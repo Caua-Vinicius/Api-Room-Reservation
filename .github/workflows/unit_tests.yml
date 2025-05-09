@@ -22,7 +22,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "latest"
+          node-version: "24"
           cache: "pnpm"
           cache-dependency-path: api/pnpm-lock.yaml
 
