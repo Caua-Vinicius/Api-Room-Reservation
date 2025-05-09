@@ -21,20 +21,11 @@ jobs:
 
       - name: Install Node.js
         uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-          cache: "pnpm"
-          cache-dependency-path: api/pnpm-lock.yaml
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
 
       - name: Install Dependencies
-        working-directory: api
-        run: pnpm install
+        working-directory: ./api
+        run: npm install
 
       - name: Run Backend Tests
-        working-directory: api
-        run: pnpm test
+        working-directory: ./api
+        run: npm test
