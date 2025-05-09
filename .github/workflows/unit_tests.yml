@@ -22,14 +22,19 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'latest'
-          cache: 'npm'
-          cache-dependency-path: api/package-lock.json
+          node-version: "latest"
+          cache: "pnpm"
+          cache-dependency-path: api/pnpm-lock.yaml
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Install Dependencies
         working-directory: api
-        run: npm install
+        run: pnpm install
 
       - name: Run Backend Tests
         working-directory: api
-        run: npm run test
+        run: pnpm test
