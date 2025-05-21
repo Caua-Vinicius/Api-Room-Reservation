@@ -124,7 +124,9 @@ describe('RoomsService', () => {
   });
 
   it('should throw NotFoundException if room not found', async () => {
-    mockRoomsModel.findByIdAndDelete.mockReturnValue(null);
+    mockRoomsModel.findByIdAndDelete.mockReturnValue({
+      exec: jest.fn().mockResolvedValue(null),
+    } as any);
 
     await expect(roomsService.deleteRoom('1')).rejects.toThrow(
       NotFoundException,
