@@ -22,7 +22,7 @@ export class RoomService {
     return this.roomModel.findById(id).exec();
   }
 
-  async updateRoom(id: string, updateRoomDto: CreateRoomDto): Promise<Rooms> {
+  async updateRoom(id: string, updateRoomDto: Partial<CreateRoomDto>): Promise<Rooms> {
     const updatedRoom = await this.roomModel.findByIdAndUpdate(
       id,
       updateRoomDto,
