@@ -1,0 +1,12 @@
+node_modules/
+*.log
+*.env
+build/
+dist/
+.tmp/
+.DS_Store
+Thumbs.db
+.vscode/
+test/
+.git/
+.gitignore

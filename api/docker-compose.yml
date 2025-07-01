@@ -1,0 +1,60 @@
+services:
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+    networks:
+      - api-db
+
+  api:
+    build: ./
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - 3000:3000
+    command: npm run dev
+    depends_on:
+      - mongodb
+    networks:
+      - api-db
+      - monitoring-net
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      DATABASE_URL: ${DATABASE_URL}
+    restart: always
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - 9090:9090
+    networks:
+      - monitoring-net
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3001:3000
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - monitoring-net
+    restart: always
+
+volumes:
+  mongodb_data_container:
+  grafana-storage:
+
+networks:
+  api-db:
+    driver: bridge
+  monitoring-net:
+    driver: bridge

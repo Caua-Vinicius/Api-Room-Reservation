@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateUserDto } from './dtos/createUserDto';
-import { Users } from './users.model';
-import { LoginDto } from './dtos/loginDto';
+import { CreateUserDto } from 'src/users/dtos/createUserDto';
+import { Users } from 'src/users/users.model';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { LoginDto } from 'src/users/dtos/loginDto';
+import { JwtPayload } from 'src/users/interfaces/jwt-payload.interface';
+
 
 @Injectable()
 export class AuthService {
@@ -45,7 +46,10 @@ export class AuthService {
 
   async validateUser(email: string, pass: string): Promise<Users> {
     const user = await this.userModel.findOne({ email });
-    if (user && (await this.comparePassword(pass, user.password_hash))) {
+    if (!user) {
+      throw new NotFoundException(`User not found with email '${email}' not found` );
+    }
+    if ((await this.comparePassword(pass, user.password_hash))) {
       return user;
     }
     return null;
